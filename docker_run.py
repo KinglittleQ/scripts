@@ -9,12 +9,11 @@ SHELL = 'bash'
 HOME_DIR = os.path.expanduser('~')
 USER_NAME = getpass.getuser()
 HOST_NAME = 'deng_docker'
-DATA_DIRS = ['/data', '/data2', '/private', '/nfs']
+DATA_DIRS = ['/data', '/data2', '/private', '/nfs', '/onboard_data']
 
 
 def volumes():
-    cmd = [f'--volume={HOME_DIR}:/home/{USER_NAME}',
-           '--volume=/:/outside']
+    cmd = [f'--volume={HOME_DIR}:/home/{USER_NAME}']
     for data_dir in DATA_DIRS:
         cmd.append(f'--volume={data_dir}:{data_dir}')
 
