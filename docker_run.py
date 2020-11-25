@@ -5,17 +5,21 @@ import getpass
 
 
 DOCKER_CMD = 'docker'
-SHELL = 'bash'
+SHELL = 'zsh'
 HOME_DIR = os.path.expanduser('~')
 USER_NAME = getpass.getuser()
 HOST_NAME = 'deng_docker'
-DATA_DIRS = ['/data', '/data2', '/private', '/nfs', '/onboard_data']
+DATA_DIRS = ['/data', '/data2', '/private', '/nfs', '/onboard_data',
+             f'{HOME_DIR}/.zsh_history', f'{HOME_DIR}/.oh-my-zsh',
+             f'{HOME_DIR}/.deng.zshrc', f'{HOME_DIR}/.ssh',
+             f'{HOME_DIR}/.gitconfig', f'{HOME_DIR}/scripts']
 
 
 def volumes():
-    cmd = [f'--volume={HOME_DIR}:/home/{USER_NAME}']
+    cmd = [f'--volume={HOME_DIR}/p2b:/home/{USER_NAME}/p2b']
+    cmd += [f'--volume={HOME_DIR}/.docker.zshrc:/home/{USER_NAME}/.zshrc']
     for data_dir in DATA_DIRS:
-        cmd.append(f'--volume={data_dir}:{data_dir}')
+        cmd.append(f'--volume={data_dir}:{data_dir}:z')
 
     return cmd
 
@@ -32,9 +36,13 @@ def main():
     cmd += [
         f'--name={container_name}',
         '--runtime=nvidia',
+        '--user=root:root',
         '--ipc=host',
         f'--hostname={container_name}',
         f'--workdir=/home/{USER_NAME}',
+        '--dns=114.114.114.114',
+        '--net=host',
+        '--user=dengchengqi',
         *volumes(),
         image_name,
         SHELL,
