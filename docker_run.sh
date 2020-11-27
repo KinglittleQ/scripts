@@ -6,6 +6,10 @@ DOCKER_HOME=/home/$USER
 USER_NAME=$USER
 HOST_NAME="deng_in_docker"
 DOCKER_NAME="dengchengqi_dev_pytorch"
+WORK_DIR="$(pwd)"
+DOCKER_WORK_DIR=/app
+
+echo "Work dir: $WORK_DIR"
 
 IMG="docker.fabu.ai:5000/dengchengqi/pytorch:v0.1"
 DOCKER_FILE_DIR="$HOME/dotfiles"
@@ -28,7 +32,7 @@ function local_volumes() {
            -v /private:/private \
            -v /nfs:/nfs \
            -v /onboard_data:/onboard_data \
-           -v $HOME/p2b:${DOCKER_HOME}/p2b"
+           -v $WORK_DIR:$DOCKER_WORK_DIR"
 
   case "$(uname -s)" in
   Linux)
@@ -81,7 +85,7 @@ function main() {
          --ipc=host \
          --hostname=$HOST_NAME \
          --name=$DOCKER_NAME \
-         --workdir=$DOCKER_HOME \
+         --workdir=$DOCKER_WORK_DIR \
          --dns=114.114.114.114 \
          --net=host \
          $(local_volumes) \
