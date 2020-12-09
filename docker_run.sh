@@ -1,30 +1,38 @@
 #!/usr/bin/env bash
 
 # ========================================================
-# File: docker_run.zsh
+# File: docker_run.sh
 # -----
-# Author: Check Deng
+# Author: Chengqi Deng
 # Email: checkdeng0903@gmail.com
 # =======================================================
 
 
-SCRIPTS_DIR=$(dirname "$0")
-source $SCRIPTS_DIR/get_lab.sh
-LAB="$(get_lab)"
+SCRIPTS_DIR=$(cd "$(dirname "$0")" && pwd)
+source $SCRIPTS_DIR/env.sh
+LAB="$(lab)"
 
 SHELL="zsh"
 HOME_DIR=$HOME
 DOCKER_HOME=/home/$USER
-USER_NAME=$USER
 HOST_NAME="deng_in_docker"
 WORK_DIR="$(pwd)"
 BASE_DIR="$(basename $WORK_DIR)"
 DOCKER_NAME="dev_in_$BASE_DIR"
 DOCKER_WORK_DIR=/app
 
-echo "Work dir: $WORK_DIR"
+USER_ID=$(id -u)
+GROUP_ID=$(id -g)
+SERVER=$(server)
+TAG="v0.1"
 
-DOCKER_FILE_DIR="$HOME/scripts/dockerfiles"
+PROXY=$(http_proxy)
+
+BASE_IMG_NAME="$SERVER/$USER/pytorch:$TAG"
+IMG_NAME="$USER/dev_in_pytorch"
+DOCKER_FILE_DIR="$SCRIPTS_DIR/dockerfiles"
+
+echo "Work dir: $WORK_DIR"
 
 function local_volumes() {
   volumes="-v $HOME/.cache:${DOCKER_HOME}/.cache \
@@ -42,7 +50,7 @@ function local_volumes() {
            -v /data:/data \
            -v $WORK_DIR:$DOCKER_WORK_DIR"
 
-  if [ "$LAB" = "CAD" ]; then
+  if [ "$LAB" = "FABU" ]; then
     volumes="${volumes} -v /data2:/data2 \
                         -v /private:/private \
                         -v /nfs:/nfs \
@@ -69,27 +77,64 @@ function local_volumes() {
   echo "${volumes}"
 }
 
+function build_base_image() {
+  echo "$INFO Start building base image: $BASE_IMG_NAME ..."
+
+  docker images --format "{{.Repository}}:{{.Tag}}" | grep "${BASE_IMG_NAME}" 1>/dev/null
+  if [ $? == 0 ]; then
+    echo "$INFO Image ${BASE_IMG_NAME} already exits, continue ..."
+    return
+  fi
+
+  echo "$INFO Building $BASE_IMG_NAME"
+  docker build -t $BASE_IMG_NAME \
+               --network host \
+               --build-arg HTTP_PROXY=$PROXY \
+               --build-arg HTTPS_PROXY=$PROXY \
+               -f "$DOCKER_FILE_DIR/Dockerfile.base" \
+               .
+
+  echo "$INFO Build base image successfully"
+  docker push $BASE_IMG_NAME
+}
+
+function print_status() {
+  echo "$INFO user = $USER, uid = $USER_ID, gid = $GROUP_ID"
+  echo "$INFO base-image = $BASE_IMG_NAME"
+  echo "$INFO hostname = $HOST_NAME, container = $DOCKER_NAME, image = $IMG_NAME"
+  echo "$INFO server = $SERVER"
+  echo "$INFO work-dir = $WORK_DIR"
+}
+
 function main() {
+  print_status
+  login
+
+  # Build base image
+  build_base_image
+
   docker ps -a --format "{{.Names}}" | grep "${DOCKER_NAME}" 1>/dev/null
   if [ $? == 0 ]; then
-    echo "${DOCKER_NAME} already exits"
+    echo "$ERROR ${DOCKER_NAME} already exits"
     exit 1
   fi
 
-  USER_ID=$(id -u)
-  GROUP_ID=$(id -g)
-  IMG_NAME="$USER/dev_in_pytorch"
-
+  echo "$INFO Building image for user"
+  # Build image for user
   docker build -t $IMG_NAME \
                --network host \
-               --build-arg HTTP_PROXY=http://127.0.0.1:7891 \
-               --build-arg HTTPS_PROXY=http://127.0.0.1:7891 \
+               --build-arg HTTP_PROXY=$PROXY \
+               --build-arg HTTPS_PROXY=$PROXY \
                --build-arg USER_ID=$USER_ID \
                --build-arg GROUP_ID=$GROUP_ID \
                --build-arg USER=$USER \
-               -f "$DOCKER_FILE_DIR/Dockerfile.$LAB" \
+               --build-arg SERVER=$SERVER \
+               --build-arg TAG=$TAG \
+               -f "$DOCKER_FILE_DIR/Dockerfile.user" \
                .
   
+  echo "$INFO Start container"
+  # Start container
   docker run -it --init \
          --runtime=nvidia \
          --user=$USER \

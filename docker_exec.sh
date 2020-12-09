@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 # ========================================================
-# File: docker_exec.zsh
+# File: docker_exec.sh
 # -----
-# Author: Check Deng
+# Author: Chengqi Deng
 # Email: checkdeng0903@gmail.com
 # =======================================================
 

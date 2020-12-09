@@ -1,6 +1,16 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-PROXY=127.0.0.1:7891
+# ========================================================
+# File: set_proxy.sh
+# -----
+# Author: Chengqi Deng
+# Email: checkdeng0903@gmail.com
+# =======================================================
+
+SCRIPTS_DIR=$(cd "$(dirname "$0")" && pwd)
+source $SCRIPTS_DIR/env.sh
+
+PROXY=$(proxy)
 
 if [ $1 = "set" ] || [ $1 = "1" ]; then
 	export http_proxy=$PROXY
@@ -9,7 +19,7 @@ if [ $1 = "set" ] || [ $1 = "1" ]; then
 	export HTTPS_PROXY=$PROXY
 	export all_proxy=$PROXY
 	export ALL_PROXY=$PROXY
-	echo "set proxy as $PROXY"
+	echo "$INFO Set proxy as $PROXY"
 elif [ $1 = 'unset' ] || [ $1 = '0' ]; then
 	export http_proxy=
 	export http_proxy=
@@ -17,9 +27,9 @@ elif [ $1 = 'unset' ] || [ $1 = '0' ]; then
 	export HTTPS_PROXY=
 	export all_proxy=
 	export ALL_PROXY=
-	echo "unset proxy"
+	echo "$INFO Unset proxy"
 else
-	echo "Invalid parameter (set|1, unset|0)"
+	echo "$ERROR Invalid parameter (set|1, unset|0)"
 fi
 
 

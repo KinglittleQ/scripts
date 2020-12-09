@@ -1,17 +1,18 @@
 # ========================================================
 # File: Dockerfiles
 # -----
-# Author: Check Deng
+# Author: Chengqi Deng
 # Email: checkdeng0903@gmail.com
 # =======================================================
 
+ARG HTTP_PROXY
 
 FROM pytorch/pytorch:1.6.0-cuda10.1-cudnn7-devel
 
 # Install some basic utilities
-RUN echo "$HTTP_PROXY" && apt-get update -o Acquire::http::proxy="http://127.0.0.1:7891/"
+RUN apt-get update -o Acquire::http::proxy=$HTTP_PROXY
 RUN apt-get install -y \
-    -o Acquire::http::proxy="http://127.0.0.1:7891/" \
+    -o Acquire::http::proxy=$HTTP_PROXY \
     wget \
     curl \
     sudo \
@@ -23,19 +24,10 @@ RUN apt-get install -y \
 
 # Install OpenCV3 
 RUN conda install -c conda-forge opencv \
- && conda clean -ya
+    && conda clean -ya
 
 # set pip image
 RUN pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
-
-ARG USER_ID
-ARG GROUP_ID
-ARG USER
-
-RUN addgroup --gid $GROUP_ID $USER
-RUN adduser --disabled-password --gecos '' --uid $USER_ID --gid $GROUP_ID $USER
-RUN usermod -aG sudo $USER && passwd -d $USER
-USER $USER
 
 # Set the default command to zsh
 CMD ["zsh"]

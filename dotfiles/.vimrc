@@ -1,7 +1,7 @@
 " ========================================================
 " File: .vimrc
 " -----
-" Author: Check Deng
+" Author: Chengqi Deng
 " Email: checkdeng0903@gmail.com
 " =======================================================
 
@@ -10,15 +10,15 @@
 " =========================================================
 " Vim pluggins
 " =========================================================
-call plug#begin('~/.vim/plugged')
+" call plug#begin('~/.vim/plugged')
 
-Plug 'preservim/nerdtree'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'preservim/nerdcommenter'
-Plug 'jiangmiao/auto-pairs'
+" Plug 'preservim/nerdtree'
+" Plug 'vim-airline/vim-airline'
+" Plug 'vim-airline/vim-airline-themes'
+" Plug 'preservim/nerdcommenter'
+" Plug 'jiangmiao/auto-pairs'
 
-call plug#end()
+" call plug#end()
 
 
 

@@ -1,3 +1,11 @@
+# ========================================================
+# File: .vimrc
+# -----
+# Author: Chengqi Deng
+# Email: checkdeng0903@gmail.com
+# =======================================================
+
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -95,7 +103,6 @@ export SSH_KEY_PATH="~/.ssh/rsa_id"
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-resize > /dev/null
 export LC_ALL=en_US.utf8
 export TERM=xterm-256color
 

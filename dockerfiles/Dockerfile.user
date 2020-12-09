@@ -1,16 +1,19 @@
 # ========================================================
 # File: Dockerfiles
 # -----
-# Author: Check Deng
+# Author: Chengqi Deng
 # Email: checkdeng0903@gmail.com
 # =======================================================
 
+ARG USER
+ARG SERVER
+ARG TAG
 
-FROM docker.fabu.ai:5000/dengchengqi/pytorch:v0.1
+FROM $SERVER/$USER/pytorch:$TAG
 
+ARG USER
 ARG USER_ID
 ARG GROUP_ID
-ARG USER
 
 RUN addgroup --gid $GROUP_ID $USER
 RUN adduser --disabled-password --gecos '' --uid $USER_ID --gid $GROUP_ID $USER
