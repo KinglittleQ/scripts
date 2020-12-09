@@ -19,7 +19,7 @@ function install_v2ray() {
 
   if [ ! -d "$(v2ray_root)" ]; then
     echo "$INFO Downloading v2ray ..."
-    git clone git@github.com:KinglittleQ/v2ray.git $(v2ray_root)
+    git clone git@git.zjulearning.org:Dengcq/v2ray.git $(v2ray_root)
   else
     echo "$INFO v2ray exists."
   fi
