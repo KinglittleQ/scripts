@@ -80,6 +80,7 @@ function local_volumes() {
 function build_base_image() {
   echo "$INFO Start building base image: $BASE_IMG_NAME ..."
 
+  docker pull $BASE_IMG_NAME
   docker images --format "{{.Repository}}:{{.Tag}}" | grep "${BASE_IMG_NAME}" 1>/dev/null
   if [ $? == 0 ]; then
     echo "$INFO Image ${BASE_IMG_NAME} already exits, continue ..."
