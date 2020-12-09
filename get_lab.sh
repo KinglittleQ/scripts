@@ -1,15 +1,16 @@
 #!/usr/bin/env bash
 
 # ========================================================
-# File: start_v2ray.zsh
+# File: get_lab.zsh
 # -----
 # Author: Check Deng
 # Email: checkdeng0903@gmail.com
 # =======================================================
 
-
-V2RAY_ROOT=$HOME/Software/v2ray
-V2RAY=$V2RAY_ROOT/v2ray
-
-nohup $V2RAY -config $V2RAY_ROOT/configs/config.json &
-
+func get_lab() {
+  if [[ "$(hostname)" == *"cad"* ]]; then
+    echo 'CAD'
+  else
+    echo 'FABU'
+  fi
+}

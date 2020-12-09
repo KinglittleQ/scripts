@@ -1,5 +1,17 @@
 #!/usr/bin/env bash
 
+# ========================================================
+# File: docker_run.zsh
+# -----
+# Author: Check Deng
+# Email: checkdeng0903@gmail.com
+# =======================================================
+
+
+SCRIPTS_DIR=$(dirname "$0")
+source $SCRIPTS_DIR/get_lab.sh
+LAB="$(get_lab)"
+
 SHELL="zsh"
 HOME_DIR=$HOME
 DOCKER_HOME=/home/$USER
@@ -66,7 +78,7 @@ function main() {
 
   USER_ID=$(id -u)
   GROUP_ID=$(id -g)
-  IMG_NAME="$USER/dev_in_$BASE_DIR"
+  IMG_NAME="$USER/dev_in_pytorch"
 
   docker build -t $IMG_NAME \
                --network host \

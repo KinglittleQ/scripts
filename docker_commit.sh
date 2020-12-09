@@ -10,4 +10,4 @@ function main() {
   docker commit -a $AUTHOR $1 $2 -m $3
 }
 
-main
+main $1 $2 $3

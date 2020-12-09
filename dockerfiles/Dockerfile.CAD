@@ -18,7 +18,8 @@ RUN apt-get install -y \
     git \
     zsh \
     cmake \
-    libboost-all-dev
+    libboost-all-dev \
+    liblz4-dev
 
 # Install OpenCV3 
 RUN conda install -c conda-forge opencv \

@@ -1,7 +1,17 @@
 #!/usr/bin/env bash
 
+# ========================================================
+# File: docker_exec.zsh
+# -----
+# Author: Check Deng
+# Email: checkdeng0903@gmail.com
+# =======================================================
+
+
 SHELL="zsh"
-DOCKER_NAME="dengchengqi_dev_pytorch"
+WORK_DIR="$(pwd)"
+BASE_DIR="$(basename $WORK_DIR)"
+DOCKER_NAME="dev_in_$BASE_DIR"
 
 function main() {
   docker exec -it \
