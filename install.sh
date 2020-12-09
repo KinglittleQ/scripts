@@ -26,6 +26,7 @@ ln -sf $DOTFILES_DIR/.docker.zshrc $HOME/.docker.zshrc
 echo "$INFO Installing v2ray"
 install_v2ray
 source $SCRIPTS_DIR/start_v2ray.sh
+source $SCRIPTS_DIR/set_proxy.sh 1
 
 echo "$INFO Installing oh-my-zsh"
 install_oh_my_zsh
