@@ -5,9 +5,9 @@
 # Email: checkdeng0903@gmail.com
 # =======================================================
 
-ARG HTTP_PROXY
-
 FROM pytorch/pytorch:1.6.0-cuda10.1-cudnn7-devel
+
+ARG HTTP_PROXY
 
 # Install some basic utilities
 RUN apt-get update -o Acquire::http::proxy=$HTTP_PROXY
@@ -23,13 +23,15 @@ RUN apt-get install -y \
     liblz4-dev \
     clang-format
 
+# set pip image
+RUN pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple \
+    && conda config --set proxy_servers.http $HTTP_PROXY \
+    && conda config --set proxy_servers.https $HTTP_PROXY
+
 # Install OpenCV3 
 RUN conda install -c conda-forge opencv \
     && conda install faiss-cpu -c pytorch \
     && conda clean -ya
-
-# set pip image
-RUN pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 
 # Set the default command to zsh
 CMD ["zsh"]
