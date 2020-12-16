@@ -20,10 +20,12 @@ RUN apt-get install -y \
     zsh \
     cmake \
     libboost-all-dev \
-    liblz4-dev
+    liblz4-dev \
+    clang-format
 
 # Install OpenCV3 
 RUN conda install -c conda-forge opencv \
+    && conda install faiss-cpu -c pytorch \
     && conda clean -ya
 
 # set pip image

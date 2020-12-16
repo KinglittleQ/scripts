@@ -24,7 +24,7 @@ DOCKER_WORK_DIR=/app
 USER_ID=$(id -u)
 GROUP_ID=$(id -g)
 SERVER=$(server)
-TAG="v0.1"
+TAG="v0.2"
 
 PROXY=$(http_proxy)
 
@@ -43,6 +43,7 @@ function local_volumes() {
            -v $HOME/.deng.zshrc:${DOCKER_HOME}/.deng.zshrc \
            -v $HOME/.gitconfig:${DOCKER_HOME}/.gitconfig \
            -v $HOME/scripts:${DOCKER_HOME}/scripts \
+           -v $HOME/data:${DOCKER_HOME}/data \
            -v /dev/null:/dev/raw1394 \
            -v /tmp/core:/tmp/core \
            -v /proc/sys/kernel/core_pattern:/tmp/core_pattern:rw \
