@@ -54,8 +54,10 @@ function local_volumes() {
   if [ "$LAB" = "FABU" ]; then
     volumes="${volumes} -v /data2:/data2 \
                         -v /private:/private \
-                        -v /nfs:/nfs \
-                        -v /onboard_data:/onboard_data"
+                        -v /nfs:/nfs"
+    if [ -d "/onboard_data/bags" ]; then
+      volumes="${volumes} -v /onboard_data:/onboard_data"
+    fi
   fi
 
   if [[ "$(uname -s)" == *"Linux"* ]]; then
@@ -79,16 +81,16 @@ function local_volumes() {
 }
 
 function build_base_image() {
-  echo "$INFO Start building base image: $BASE_IMG_NAME ..."
+  echo_info "Start building base image: $BASE_IMG_NAME ..."
 
   docker pull $BASE_IMG_NAME
   docker images --format "{{.Repository}}:{{.Tag}}" | grep "${BASE_IMG_NAME}" 1>/dev/null
   if [ $? == 0 ]; then
-    echo "$INFO Image ${BASE_IMG_NAME} already exits, continue ..."
+    echo_info "Image ${BASE_IMG_NAME} already exits, continue ..."
     return
   fi
 
-  echo "$INFO Building $BASE_IMG_NAME"
+  echo_info "Building $BASE_IMG_NAME"
   docker build -t $BASE_IMG_NAME \
                --network host \
                --build-arg HTTP_PROXY=$PROXY \
@@ -96,16 +98,16 @@ function build_base_image() {
                -f "$DOCKER_FILE_DIR/Dockerfile.base" \
                .
 
-  echo "$INFO Build base image successfully"
+  echo_info "Build base image successfully"
   docker push $BASE_IMG_NAME
 }
 
 function print_status() {
-  echo "$INFO user = $USER, uid = $USER_ID, gid = $GROUP_ID"
-  echo "$INFO base-image = $BASE_IMG_NAME"
-  echo "$INFO hostname = $HOST_NAME, container = $DOCKER_NAME, image = $IMG_NAME"
-  echo "$INFO server = $SERVER"
-  echo "$INFO work-dir = $WORK_DIR"
+  echo_info "user = $USER, uid = $USER_ID, gid = $GROUP_ID"
+  echo_info "base-image = $BASE_IMG_NAME"
+  echo_info "hostname = $HOST_NAME, container = $DOCKER_NAME, image = $IMG_NAME"
+  echo_info "server = $SERVER"
+  echo_info "work-dir = $WORK_DIR"
 }
 
 function main() {
@@ -117,11 +119,11 @@ function main() {
 
   docker ps -a --format "{{.Names}}" | grep "${DOCKER_NAME}" 1>/dev/null
   if [ $? == 0 ]; then
-    echo "$ERROR ${DOCKER_NAME} already exits"
+    echo_error "${DOCKER_NAME} already exits"
     exit 1
   fi
 
-  echo "$INFO Building image for user"
+  echo_info "Building image for user"
   # Build image for user
   docker build -t $IMG_NAME \
                --network host \
@@ -135,7 +137,7 @@ function main() {
                -f "$DOCKER_FILE_DIR/Dockerfile.user" \
                .
   
-  echo "$INFO Start container"
+  echo_info "Start container"
   # Start container
   docker run -it --init \
          --runtime=nvidia \

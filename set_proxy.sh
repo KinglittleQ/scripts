@@ -19,7 +19,7 @@ if [ $1 = "set" ] || [ $1 = "1" ]; then
 	export HTTPS_PROXY=$PROXY
 	export all_proxy=$PROXY
 	export ALL_PROXY=$PROXY
-	echo "$INFO Set proxy as $PROXY"
+	echo_info "Set proxy as $PROXY"
 elif [ $1 = 'unset' ] || [ $1 = '0' ]; then
 	export http_proxy=
 	export http_proxy=
@@ -27,9 +27,9 @@ elif [ $1 = 'unset' ] || [ $1 = '0' ]; then
 	export HTTPS_PROXY=
 	export all_proxy=
 	export ALL_PROXY=
-	echo "$INFO Unset proxy"
+	echo_info "Unset proxy"
 else
-	echo "$ERROR Invalid parameter (set|1, unset|0)"
+	echo_info "Invalid parameter (set|1, unset|0)"
 fi
 
 

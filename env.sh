@@ -13,11 +13,21 @@ RESET=`tput sgr0`
 ERROR="${RED}[ERROR]$RESET"
 INFO="${GREEN}[INFO]$RESET"
 
+function echo_error() {
+  echo "$ERROR $@"
+}
+
+function echo_info() {
+  echo "$INFO $@"
+}
+
 function lab() {
   if [[ "$(hostname)" == *"cad"* ]]; then
     echo 'CAD'
-  else
+  elif [[ "$(hostname)" == *"fabu"* ]]; then
     echo 'FABU'
+  else
+    echo 'Unknown host'
   fi
 }
 
@@ -32,13 +42,13 @@ function server() {
 
 function login() {
   if [ "$LAB" = "CAD" ]; then
-    echo "$INFO Login into zjulearning docker server"
+    echo_info "Login into zjulearning docker server"
     docker login $(server) -u zjulearning -p zjulearning
   elif [ "$LAB" = "FABU" ]; then
     docker login $(server) -u fabu -p fabu
-    echo "$INFO Login into fabu docker server"
+    echo_info "Login into fabu docker server"
   else
-    echo "$ERROR Unknown lab: $LAB"
+    echo_error "Unknown lab: $LAB"
   fi
 }
 

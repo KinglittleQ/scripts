@@ -17,22 +17,22 @@ DOTFILES_DIR=$SCRIPTS_DIR/dotfiles
 source $SCRIPTS_DIR/install_omz.sh
 source $SCRIPTS_DIR/install_v2ray.sh
 
-echo "$INFO Home directory: $HOME"
-echo "$INFO Linking dotfiles"
+echo_info "Home directory: $HOME"
+echo_info "Linking dotfiles"
 ln -sf $DOTFILES_DIR/.tmux.conf $HOME/.tmux.conf
 ln -sf $DOTFILES_DIR/.vimrc $HOME/.vimrc
 ln -sf $DOTFILES_DIR/.docker.zshrc $HOME/.docker.zshrc
 
-echo "$INFO Installing v2ray"
+echo_info "Installing v2ray"
 install_v2ray
 source $SCRIPTS_DIR/start_v2ray.sh
 source $SCRIPTS_DIR/set_proxy.sh 1
 
-echo "$INFO Installing oh-my-zsh"
+echo_info "Installing oh-my-zsh"
 install_oh_my_zsh
 
 ln -sf $DOTFILES_DIR/.deng.zshrc $HOME/.deng.zshrc
 sed 's/^source $ZSH\/oh-my-zsh.sh/source $HOME\/.deng.zshrc\n&/' $HOME/.zshrc > $HOME/.new.zshrc
 mv $HOME/.new.zshrc $HOME/.zshrc
 
-echo "$INFO Done"
+echo_info "Done"
