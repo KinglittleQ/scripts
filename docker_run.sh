@@ -49,6 +49,7 @@ function local_volumes() {
            -v /proc/sys/kernel/core_pattern:/tmp/core_pattern:rw \
            -v /tmp/.ssh-agent-$USER:/tmp/.ssh-agent-$USER \
            -v /data:/data \
+           -v /ssd:/ssd \
            -v $WORK_DIR:$DOCKER_WORK_DIR"
 
   if [ "$LAB" = "FABU" ]; then
