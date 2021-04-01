@@ -21,9 +21,9 @@ function set_proxy() {
 	fi
 
 	pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple \
-			&> /dev/null
+			&> /dev/null | true
 	pip3 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple \
-			&> /dev/null
+			&> /dev/null | true
 
 	alias sudo='sudo '
 	alias apt='apt -o Acquire::http::proxy=$(http_proxy)'
