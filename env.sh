@@ -24,7 +24,7 @@ function echo_info() {
 function lab() {
   if [[ "$(hostname)" == *"cad"* ]]; then
     echo 'CAD'
-  elif [[ "$(hostname)" == *"fabu"* ]]; then
+  elif [[ -d "/onboard_data" ]]; then
     echo 'FABU'
   else
     echo 'Unknown host'
