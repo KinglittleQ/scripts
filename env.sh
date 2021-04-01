@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # ========================================================
-# File: get_lab.sh
+# File: env.sh
 # -----
 # Author: Chengqi Deng
 # Email: checkdeng0903@gmail.com
