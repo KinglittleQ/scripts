@@ -8,13 +8,20 @@
 # =======================================================
 
 RED=`tput setaf 1`
+YELLOW=`tput setaf 3`
 GREEN=`tput setaf 2`
 RESET=`tput sgr0`
+
 ERROR="${RED}[ERROR]$RESET"
+WARN="${YELLOW}[WARN]$RESET"
 INFO="${GREEN}[INFO]$RESET"
 
 function echo_error() {
   echo "$ERROR $@"
+}
+
+function echo_warn() {
+  echo "$WARN $@"
 }
 
 function echo_info() {

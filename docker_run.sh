@@ -89,7 +89,7 @@ function build_base_image() {
   docker pull $BASE_IMG_NAME
   docker images --format "{{.Repository}}:{{.Tag}}" | grep "${BASE_IMG_NAME}" 1>/dev/null
   if [ $? == 0 ]; then
-    echo_info "Image ${BASE_IMG_NAME} already exits, continue ..."
+    echo_warn "Image ${BASE_IMG_NAME} already exits, continue ..."
     return
   fi
 
@@ -122,7 +122,7 @@ function main() {
 
   docker ps -a --format "{{.Names}}" | grep "${DOCKER_NAME}" 1>/dev/null
   if [ $? == 0 ]; then
-    echo_info "${DOCKER_NAME} already exits, commit and run it"
+    echo_warn "${DOCKER_NAME} already exits, commit and run it"
     docker commit ${DOCKER_NAME} $IMG_NAME
     docker rm ${DOCKER_NAME}
   else
