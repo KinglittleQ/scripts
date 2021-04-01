@@ -37,8 +37,8 @@ function unset_proxy() {
 		echo_warn "Could not find conda, skip it"
 	fi
 
-	pip config set global.index-url &> /dev/null
-	pip3 config set global.index-url &> /dev/null
+	pip config set global.index-url &> /dev/null | true
+	pip3 config set global.index-url &> /dev/null | true
 
 	unalias sudo apt &> /dev/null
 }
