@@ -39,6 +39,8 @@ function unset_proxy() {
 
 	pip config set global.index-url &> /dev/null
 	pip3 config set global.index-url &> /dev/null
+
+	unalias sudo apt &> /dev/null
 }
 
 if [ $1 = "set" ] || [ $1 = "1" ]; then
