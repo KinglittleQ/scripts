@@ -27,7 +27,7 @@ function lab() {
   elif [[ -d "/onboard_data" ]]; then
     echo 'FABU'
   else
-    echo 'Unknown host'
+    echo 'unknown-host'
   fi
 }
 
@@ -37,10 +37,13 @@ function server() {
     echo "cad-data.zjulearning.org:5000"
   elif [ "$LAB" = "FABU" ]; then
     echo "docker.fabu.ai:5000"
+  else
+    echo "unknown-server"
   fi
 }
 
 function login() {
+  LAB=$(lab)
   if [ "$LAB" = "CAD" ]; then
     echo_info "Login into zjulearning docker server"
     docker login $(server) -u zjulearning -p zjulearning
@@ -48,8 +51,13 @@ function login() {
     docker login $(server) -u fabu -p fabu
     echo_info "Login into fabu docker server"
   else
-    echo_error "Unknown lab: $LAB"
+    echo_error "unknown-lab: $LAB"
+    exit 1
   fi
+}
+
+function filter() {
+  echo $1 | sed 's/\W/_/g'
 }
 
 function proxy() {

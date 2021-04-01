@@ -37,6 +37,11 @@ RUN pip install cmake --upgrade
 # Install mkl
 RUN conda install -c anaconda mkl
 
+# Additional packages
+RUN apt-get install -y \
+    -o Acquire::http::proxy=$HTTP_PROXY \
+    vim
+
 # Set the default command to zsh
 CMD ["zsh"]
 

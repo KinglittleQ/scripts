@@ -12,19 +12,20 @@ SCRIPTS_DIR=$(cd "$(dirname "$0")" && pwd)
 source $SCRIPTS_DIR/env.sh
 LAB="$(lab)"
 
+TAG="v0.4"
+
 SHELL="zsh"
 HOME_DIR=$HOME
 DOCKER_HOME=/home/$USER
-HOST_NAME="deng_in_docker"
 WORK_DIR="$(pwd)"
 BASE_DIR="$(basename $WORK_DIR)"
-DOCKER_NAME="dev_in_$BASE_DIR"
+HOST_NAME=$(filter "dev_in_$BASE_DIR")
+DOCKER_NAME=$(filter "dev_in_$BASE_DIR:$TAG")
 DOCKER_WORK_DIR=/app
 
 USER_ID=$(id -u)
 GROUP_ID=$(id -g)
 SERVER=$(server)
-TAG="v0.3"
 
 PROXY=$(http_proxy)
 
