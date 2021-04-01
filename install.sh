@@ -32,11 +32,11 @@ echo_info "Installing oh-my-zsh"
 install_oh_my_zsh
 
 ln -sf $DOTFILES_DIR/.deng.zshrc $HOME/.deng.zshrc
-inserted=$(cat $HOME/.zshrc | grep -c "source $HOME/.deng.zshrc")
-if [ $inserted == 0 ]; then
+
+if ! grep -Fxq 'source $HOME/.deng.zshrc' $HOME/.zshrc ; then
   sed 's/^source $ZSH\/oh-my-zsh.sh/source $HOME\/.deng.zshrc\n&/' \
       $HOME/.zshrc > $HOME/.new.zshrc
+  mv $HOME/.new.zshrc $HOME/.zshrc
 fi
-mv $HOME/.new.zshrc $HOME/.zshrc
 
 echo_info "Done"
