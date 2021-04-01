@@ -20,6 +20,11 @@ RUN adduser --disabled-password --gecos '' --uid $USER_ID --gid $GROUP_ID $USER
 RUN usermod -aG sudo $USER && passwd -d $USER
 USER $USER
 
+# set proxy for pip and conda
+RUN pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple \
+    && conda config --set proxy_servers.http $HTTP_PROXY \
+    && conda config --set proxy_servers.https $HTTP_PROXY
+
 # Set the default command to zsh
 CMD ["zsh"]
 

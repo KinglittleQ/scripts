@@ -19,6 +19,9 @@ if [ $1 = "set" ] || [ $1 = "1" ]; then
 	export HTTPS_PROXY=$PROXY
 	export all_proxy=$PROXY
 	export ALL_PROXY=$PROXY
+	conda config --set proxy_servers.http $(http_proxy)
+	conda config --set proxy_servers.https $(http_proxy)
+	pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 	echo_info "Set proxy as $PROXY"
 elif [ $1 = 'unset' ] || [ $1 = '0' ]; then
 	export http_proxy=

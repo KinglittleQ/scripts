@@ -18,8 +18,8 @@ RUN apt-get install -y \
     sudo \
     git \
     zsh \
-    cmake \
-    libboost-all-dev \
+    swig \
+    libssl-dev \
     liblz4-dev \
     clang-format
 
@@ -29,9 +29,13 @@ RUN pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple \
     && conda config --set proxy_servers.https $HTTP_PROXY
 
 # Install OpenCV3 
-RUN conda install -c conda-forge opencv \
-    && conda install faiss-cpu -c pytorch \
-    && conda clean -ya
+RUN conda install -c conda-forge opencv
+
+# Install cmake
+RUN pip install cmake --upgrade
+
+# Install mkl
+RUN conda install -c anaconda mkl
 
 # Set the default command to zsh
 CMD ["zsh"]

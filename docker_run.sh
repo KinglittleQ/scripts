@@ -24,18 +24,19 @@ DOCKER_WORK_DIR=/app
 USER_ID=$(id -u)
 GROUP_ID=$(id -g)
 SERVER=$(server)
-TAG="v0.2"
+TAG="v0.3"
 
 PROXY=$(http_proxy)
 
 BASE_IMG_NAME="$SERVER/$USER/pytorch:$TAG"
-IMG_NAME="$USER/dev_in_pytorch"
+IMG_NAME="$USER/$DOCKER_NAME"
 DOCKER_FILE_DIR="$SCRIPTS_DIR/dockerfiles"
 
 echo "Work dir: $WORK_DIR"
 
 function local_volumes() {
   volumes="-v $HOME/.cache:${DOCKER_HOME}/.cache \
+           -v $HOME/.local:${DOCKER_HOME}/.local \
            -v $HOME/.ssh:${DOCKER_HOME}/.ssh \
            -v $HOME/.zsh_history:${DOCKER_HOME}/.zsh_history \
            -v $HOME/.oh-my-zsh:${DOCKER_HOME}/.oh-my-zsh \
@@ -120,23 +121,24 @@ function main() {
 
   docker ps -a --format "{{.Names}}" | grep "${DOCKER_NAME}" 1>/dev/null
   if [ $? == 0 ]; then
-    echo_error "${DOCKER_NAME} already exits"
-    exit 1
+    echo_info "${DOCKER_NAME} already exits, commit and run it"
+    docker commit ${DOCKER_NAME} $IMG_NAME
+    docker rm ${DOCKER_NAME}
+  else
+    echo_info "Building image for user"
+    # Build image for user
+    docker build -t $IMG_NAME \
+                --network host \
+                --build-arg HTTP_PROXY=$PROXY \
+                --build-arg HTTPS_PROXY=$PROXY \
+                --build-arg USER_ID=$USER_ID \
+                --build-arg GROUP_ID=$GROUP_ID \
+                --build-arg USER=$USER \
+                --build-arg SERVER=$SERVER \
+                --build-arg TAG=$TAG \
+                -f "$DOCKER_FILE_DIR/Dockerfile.user" \
+                .
   fi
-
-  echo_info "Building image for user"
-  # Build image for user
-  docker build -t $IMG_NAME \
-               --network host \
-               --build-arg HTTP_PROXY=$PROXY \
-               --build-arg HTTPS_PROXY=$PROXY \
-               --build-arg USER_ID=$USER_ID \
-               --build-arg GROUP_ID=$GROUP_ID \
-               --build-arg USER=$USER \
-               --build-arg SERVER=$SERVER \
-               --build-arg TAG=$TAG \
-               -f "$DOCKER_FILE_DIR/Dockerfile.user" \
-               .
   
   echo_info "Start container"
   # Start container
