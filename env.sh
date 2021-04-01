@@ -22,9 +22,9 @@ function echo_info() {
 }
 
 function lab() {
-  if [[ "$(hostname)" == *"cad"* ]]; then
+  if [[ "$(ip_address)" == *"10.76."* ]]; then
     echo 'CAD'
-  elif [[ -d "/onboard_data" ]]; then
+  elif [[ "$(ip_address)" == *"192.168."* ]]; then
     echo 'FABU'
   else
     echo 'unknown-host'
@@ -58,6 +58,10 @@ function login() {
 
 function filter() {
   echo $1 | sed 's/\W/_/g'
+}
+
+function ip_address() {
+  hostname -I | awk '{print $1}'
 }
 
 function proxy() {
