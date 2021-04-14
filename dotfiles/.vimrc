@@ -40,6 +40,7 @@ set incsearch
 set ignorecase
 set mouse=a
 set encoding=utf-8 nobomb
+set backspace=indent,eol,start  " more powerful backspacing
 
 set autowrite
 set nobackup
